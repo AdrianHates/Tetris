@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/AdrianHates/Tetris/static/css/main.196b72a9.css",
-    "main.js": "/AdrianHates/Tetris/static/js/main.f9bbc557.js",
-    "static/js/787.28cb0dcd.chunk.js": "/AdrianHates/Tetris/static/js/787.28cb0dcd.chunk.js",
-    "index.html": "/AdrianHates/Tetris/index.html",
-    "main.196b72a9.css.map": "/AdrianHates/Tetris/static/css/main.196b72a9.css.map",
-    "main.f9bbc557.js.map": "/AdrianHates/Tetris/static/js/main.f9bbc557.js.map",
-    "787.28cb0dcd.chunk.js.map": "/AdrianHates/Tetris/static/js/787.28cb0dcd.chunk.js.map"
+    "main.css": "/Tetris/static/css/main.196b72a9.css",
+    "main.js": "/Tetris/static/js/main.d7f34006.js",
+    "static/js/787.28cb0dcd.chunk.js": "/Tetris/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/Tetris/index.html",
+    "main.196b72a9.css.map": "/Tetris/static/css/main.196b72a9.css.map",
+    "main.d7f34006.js.map": "/Tetris/static/js/main.d7f34006.js.map",
+    "787.28cb0dcd.chunk.js.map": "/Tetris/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.196b72a9.css",
-    "static/js/main.f9bbc557.js"
+    "static/js/main.d7f34006.js"
   ]
 }
