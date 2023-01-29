@@ -172,7 +172,7 @@ class Tetris extends React.Component {
     }
     
     comenzar = () => {
-      const carga = new Audio('./audios/tetris.mp3')
+      const carga = new Audio('src/audio/tetris.mp3')
       carga.play();      
       carga.controls = true;
       this.setState({Estado: true, Actual:espacio()})
