@@ -1,7 +1,9 @@
 
 import './App.css';
 import React from 'react';
-
+import audio from './audio/tetris.mp3';
+import gameOver from './audio/gameOver.mp3';
+import smash from './audio/smash.m4a'
 
 
 const bloque = [[0,4],[0,5],[1,4],[1,5]];
@@ -66,7 +68,9 @@ class Tetris extends React.Component {
   
     componentDidMount() {  
     this.plat = this.plataforma.current;
-
+    this.carga = new Audio(audio);
+    this.gameOver = new Audio(gameOver);
+    this.smash = new Audio(smash);
    document.addEventListener('keypress', this.EventoKey )
       
       document.addEventListener('keyup', (event)=>{
@@ -108,6 +112,15 @@ class Tetris extends React.Component {
             });      
         };
         if(event.code.slice(-1)==='S'&&!proA.some(el=>filterEspejo.includes(el))&&Elemento.map(x=>x[0]).filter(y=>y===19).length===0){
+            let proAA=this.WASD(Elemento,0,2).map(x=>`${x[0]},${x[1]}`);
+            if(proAA.some(el=>filterEspejo.includes(el))||Elemento.map(x=>x[0]).filter(y=>y===18).length>0) {
+              this.smash.play();
+              this.smash.currentTime=0
+              this.setState({
+                Actual: this.changuito(Espejo,this.WASD(Elemento,0,1)),
+                Elemento: this.WASD(Elemento,0,1)
+                });
+            }
             this.setState({
             Actual: this.changuito(Espejo,this.WASD(Elemento,0,1)),
             Elemento: this.WASD(Elemento,0,1)
@@ -129,16 +142,22 @@ class Tetris extends React.Component {
     ejecutarIntervalo=()=>{
       let { Espejo, Elemento, Actual, Score } = this.state;
       let proA=this.WASD(Elemento,0,1).map(x=>`${x[0]},${x[1]}`);
+      let proAA=this.WASD(Elemento,0,2).map(x=>`${x[0]},${x[1]}`);
       let filterEspejo=Espejo.map((x,i)=>x.map((y,j)=>{
   if(y!=0) return `${i},${j}`})).flat().filter(z=>z!=undefined);
-      
-      if(this.WASD(Elemento,0,1).map(x=>x[0]).filter(y=>y>19).length>0||proA.some(el=>filterEspejo.includes(el))) {
+      //Si el siguiente mov choca con piezas existentes y que no pase el indice de las columnas.
+    if(this.WASD(Elemento,0,1).map(x=>x[0]).filter(y=>y>19).length>0||proA.some(el=>filterEspejo.includes(el))) {        
         
+        //Si las piezas, estan sobre piezas existentes
         if(Elemento.map(x=>`${x[0]},${x[1]}`).some(el=>filterEspejo.includes(el))) {
          document.getElementById('alerta').style.display='block';
          this.plat.style.filter='grayscale(100%)';
-         clearInterval(this.pachim)
+         clearInterval(this.pachim);                       
+         this.carga.pause();
+         this.gameOver.play();
+         this.carga.currentTime=0;
         }
+        //Si existen filas llenas, borrarlas y puntuar el score
         if(Actual.filter(el=>el.every(x=>x!==0)).length>0) {
           let CopyActual = Actual;
           let rowDelete = [];
@@ -153,7 +172,7 @@ class Tetris extends React.Component {
             }            
             
             let rowL = rowDelete.length
-            console.log(rowL)
+            
             this.setState({
               Actual: CopyActual,
               Score: Score += rowL===4?800:(rowL===3?400:(rowL===2?200:100))
@@ -161,20 +180,27 @@ class Tetris extends React.Component {
         }
         this.a = cualquiera();
         this.movimientos(random[this.a])
-        this.setState({count: 0})
+        this.setState({count: 0}) 
       }
       else {
+      if(proAA.some(el=>filterEspejo.includes(el))||Elemento.map(x=>x[0]).filter(y=>y===18).length>0) {
+        this.smash.play();
+        this.smash.currentTime=0
+        this.setState({
+          Actual: this.changuito(Espejo,this.WASD(Elemento,0,1)),
+          Elemento: this.WASD(Elemento,0,1)
+          });
+      } else {
        this.setState({
             Actual: this.changuito(Espejo,this.WASD(Elemento,0,1)),
             Elemento: this.WASD(Elemento,0,1)
             });
-      }        
+      }}        
     }
     
     comenzar = () => {
-      const carga = new Audio('src/audio/tetris.mp3')
-      carga.play();      
-      carga.controls = true;
+      this.carga.play(); 
+      this.carga.loop=true;     
       this.setState({Estado: true, Actual:espacio()})
       this.plat.style.filter='grayscale(0%)';
       document.getElementById('play').style.display='none';
@@ -188,6 +214,7 @@ class Tetris extends React.Component {
     }
   
     pausa = () => {
+      this.carga.pause()
       if(this.state.Estado){
       document.getElementById('renaudar').style.display='block';
       this.setState({Estado: false})
@@ -195,16 +222,27 @@ class Tetris extends React.Component {
     }
   
     renaudar = () => {
+      this.carga.play()
       if(!this.state.Estado){
       document.getElementById('renaudar').style.display='none';
       this.setState({Estado: true})
       this.pachim = setInterval(this.ejecutarIntervalo,1000)}
     }
   
-    movimientos = async(fig) => {
-      let { Actual } = this.state
+    movimientos = (fig) => {
+      let { Actual,Espejo } = this.state
       let a = this.changuito(Actual,fig);
-      await this.setState({ 
+      if(Espejo) {      
+      let filterEspejo=Espejo.map((x,i)=>x.map((y,j)=>{
+        if(y!=0) return `${i},${j}`})).flat().filter(z=>z!=undefined);
+        if(this.WASD(random[this.a],0,1).map(x=>`${x[0]},${x[1]}`).some(el=>filterEspejo.includes(el))||this.WASD(random[this.a],0,2).map(x=>`${x[0]},${x[1]}`).some(el=>filterEspejo.includes(el))){
+          
+          this.smash.play();
+          this.smash.currentTime=0
+          console.log('Bye')
+        };};
+        console.log('Hola')
+       this.setState({ 
         Elemento: fig,
         Espejo:Actual,
         Actual:a})
@@ -337,7 +375,7 @@ class Tetris extends React.Component {
 }
 
   render() {
-    const { Elemento,Actual,Espejo } = this.state    
+    const { Actual } = this.state    
     return(
       <div id='todo'>
         <div id='datos' style={{display:'none'}}>
@@ -361,6 +399,11 @@ class Tetris extends React.Component {
           </button>
           <p>OVER</p>
         </div>
+        <footer id='footer'>
+          Designed and Coded By<a target ='_blank' rel="noreferrer" href='https://adrianhates.github.io/Portfolio/'><br />   Herless</a>
+        </footer>
+        
+        
       </div>
     )
   }
