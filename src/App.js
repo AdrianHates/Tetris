@@ -239,9 +239,9 @@ class Tetris extends React.Component {
           
           this.smash.play();
           this.smash.currentTime=0
-          console.log('Bye')
+          
         };};
-        console.log('Hola')
+        
        this.setState({ 
         Elemento: fig,
         Espejo:Actual,
@@ -377,6 +377,7 @@ class Tetris extends React.Component {
   render() {
     const { Actual } = this.state    
     return(
+      <div id='todoDeTodo'>
       <div id='todo'>
         <div id='datos' style={{display:'none'}}>
           <p>SCORE</p>
@@ -399,12 +400,12 @@ class Tetris extends React.Component {
           </button>
           <p>OVER</p>
         </div>
-        <footer id='footer'>
-          Designed and Coded By<a target ='_blank' rel="noreferrer" href='https://adrianhates.github.io/Portfolio/'><br />   Herless</a>
-        </footer>
-        
         
       </div>
+      <footer id='footer'>
+      Designed and Coded By<a target ='_blank' rel="noreferrer" href='https://adrianhates.github.io/Portfolio/'><br />   Herless</a>
+      </footer>
+    </div>
     )
   }
 }

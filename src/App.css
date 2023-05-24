@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .alive1 {
@@ -46,9 +47,10 @@ table {
 
 #todo {
   display: flex;
-  height: 100vh;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  min-height: 100vh
 }
 
 #play {
@@ -57,11 +59,9 @@ table {
 }
 
 #pausa {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(450%,-50%)
+  display: block
 }
+
 #renaudar {
   position: absolute;
   left: 50%;
@@ -125,14 +125,19 @@ table {
 }
 
 #footer {
-  position: absolute;
   display: block;
   width: 100%;
-  top: 91.9%;
   text-align: center;
-  height: 4rem;
+  min-height: 4rem;
   margin: 0 auto; 
   background-color: #bdbdbd;
   padding: 10px
+  
+}
+
+#todoDeTodo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   
 }
